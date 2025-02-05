@@ -1,6 +1,7 @@
 package com.gestion.bancaire.compte.controller;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,14 @@ public class CompteController {
 	
     //Créer un compte bancaire
     @PostMapping("/creer")
-    public void creerCompte(@RequestParam int id, @RequestParam double solde, @RequestParam String nomClient) {
+    public void creerCompte(@RequestParam int id, @RequestParam BigDecimal solde, @RequestParam String nomClient) {
     	compteService.creerCompte(id, solde, nomClient);
     }
 
     
     //Créditer un compte bancaire
     @PostMapping("/crediter")
-    public ResponseEntity<String> crediterCompte(@RequestParam int id, @RequestParam double montant) {
+    public ResponseEntity<String> crediterCompte(@RequestParam int id, @RequestParam BigDecimal montant) {
     
         boolean credit = compteService.crediterCompte(id, montant);
         return credit? new ResponseEntity<>("succès", HttpStatus.OK):new ResponseEntity<>("echec", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,7 +45,7 @@ public class CompteController {
     
  //Débiter un compte bancaire
     @PostMapping("/debiter")
-    public ResponseEntity<String> debiterCompte(@RequestParam int id, @RequestParam double montant) {
+    public ResponseEntity<String> debiterCompte(@RequestParam int id, @RequestParam BigDecimal montant) {
         boolean debit = compteService.debiterCompte(id, montant);
         return debit?new ResponseEntity<>("succès", HttpStatus.OK):new ResponseEntity<>("echec", HttpStatus.INTERNAL_SERVER_ERROR);	
     }

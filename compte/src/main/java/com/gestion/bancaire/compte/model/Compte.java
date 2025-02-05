@@ -1,6 +1,6 @@
 package com.gestion.bancaire.compte.model;
 
-
+import java.math.BigDecimal;
 
 public class Compte {
 	
@@ -8,13 +8,13 @@ public class Compte {
 	private int id; 
 	
 	
-	private double solde;
+	private BigDecimal solde;
 	
 	private String nomClient;
 	
 	
 
-	public Compte(int id, double solde, String nomClient) {
+	public Compte(int id, BigDecimal solde, String nomClient) {
 		this.id = id;
 		this.solde = solde;
 		this.nomClient = nomClient;
@@ -32,11 +32,11 @@ public class Compte {
 		this.id = id;
 	}
 
-	public double getSolde() {
+	public BigDecimal getSolde() {
 		return solde;
 	}
 
-	public void setSolde(double solde) {
+	public void setSolde(BigDecimal solde) {
 		this.solde = solde;
 	}
 

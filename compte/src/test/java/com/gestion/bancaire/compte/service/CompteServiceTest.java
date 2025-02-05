@@ -2,6 +2,7 @@ package com.gestion.bancaire.compte.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ public class CompteServiceTest {
     void setUp() {
     	
     	compteService = new CompteService();
-    	compteService.creerCompte(21, 10.0, "Saad FAREH");
+    	compteService.creerCompte(21, new BigDecimal(10.0), "Saad FAREH");
     }
 
     @Test
@@ -31,37 +32,37 @@ public class CompteServiceTest {
         assertEquals(1, comptes.size());
         assertEquals(21, comptes.get(0).getId());
         assertEquals("Saad FAREH", comptes.get(0).getNomClient());
-        assertEquals(10.0, comptes.get(0).getSolde());
+        assertEquals(0, comptes.get(0).getSolde().compareTo(new BigDecimal(10)));
     }
 
     @Test
     void testCrediterCompte() {
         
-        boolean isCrediter = compteService.crediterCompte(21, 9.0);
+        boolean isCrediter = compteService.crediterCompte(21, new BigDecimal(9.0));
         
         assertTrue(isCrediter); 
         Compte compte = compteService.getComptes().get(0);
-        assertEquals(19.0, compte.getSolde()); 
+        assertEquals(0, compte.getSolde().compareTo(new BigDecimal(19))); 
     }
 
     @Test
     void testDebiterCompte() {
         
-    	  boolean isDebiter = compteService.debiterCompte(21, 9.0);
+    	  boolean isDebiter = compteService.debiterCompte(21, new BigDecimal(9.0));
         
         assertTrue(isDebiter); 
         Compte compte = compteService.getComptes().get(0);
-        assertEquals(1.0, compte.getSolde()); 
+        assertEquals(0, compte.getSolde().compareTo(new BigDecimal(1))); 
     }
 
     @Test
     void testDebiterCompteSoldeInsuffisant() {
         
-        boolean isSuffisant = compteService.debiterCompte(21, 30.0);
+        boolean isSuffisant = compteService.debiterCompte(21, new BigDecimal(30.0));
         
         assertFalse(isSuffisant); 
         Compte compte = compteService.getComptes().get(0);
-        assertEquals(10.0, compte.getSolde()); 
+        assertEquals(0, compte.getSolde().compareTo(new BigDecimal(10))); 
     }
 }
 	

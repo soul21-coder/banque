@@ -2,6 +2,7 @@ package com.gestion.bancaire.compte.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,13 @@ public class CompteService {
 	private List<Compte> comptes = new ArrayList<>();
 	
 	
-	 public void creerCompte(int id, double solde, String nomClient) {
+	 public void creerCompte(int id, BigDecimal solde, String nomClient) {
+		 
+		 // Vérification de l'existence du compte avant sa création
+	        if (comptes.stream().anyMatch(compte -> compte.getId()==id)) {
+	            throw new IllegalArgumentException("Le id existe déjà.");
+	        }
+
 	        Compte compte = new Compte(id, solde, nomClient);
 	        comptes.add(compte);
 	        sauvegarderComptes();
@@ -44,10 +51,10 @@ public class CompteService {
 	    }
 	 
 	
-	    public boolean crediterCompte(int id, double montant) {
+	    public boolean crediterCompte(int id, BigDecimal montant) {
 	    	
 	    	//montant negatif
-	    	if(montant <0) {
+	    	if(montant.doubleValue() <0) {
 	    		return false;
 	    	}
 	       
@@ -56,7 +63,7 @@ public class CompteService {
 	        	    .filter(compte -> compte.getId() == id)
 	        	    .findFirst()
 	        	    .map(compte -> {
-	        	        compte.setSolde(compte.getSolde() + montant);
+	        	        compte.setSolde(compte.getSolde().add(montant));
 	        	        sauvegarderComptes();
 	        	        return true;
 	        	    })
@@ -66,10 +73,10 @@ public class CompteService {
 	    }
 	    
 	    
-	    public boolean debiterCompte(int id, double montant) {
+	    public boolean debiterCompte(int id, BigDecimal montant) {
 	    	
 	    	//montant negatif
-	    	if(montant <0) {
+	    	if(montant.doubleValue() <0) {
 	    		return false;
 	    	}
 	       
@@ -77,10 +84,10 @@ public class CompteService {
 
 	        boolean debit = comptes.stream()
 	        	    .filter(compte -> compte.getId() == id)
-	        	    .filter(compte -> compte.getSolde() >= montant)
+	        	    .filter(compte -> compte.getSolde().compareTo(montant) >= 0)
 	        	    .findFirst()
 	        	    .map(compte -> {
-	        	        compte.setSolde(compte.getSolde() - montant);
+	        	        compte.setSolde(compte.getSolde().subtract(montant));
 	        	        sauvegarderComptes();
 	        	        return true;
 	        	    })
