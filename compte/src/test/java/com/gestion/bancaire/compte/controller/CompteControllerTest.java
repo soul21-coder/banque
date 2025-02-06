@@ -32,14 +32,14 @@ public class CompteControllerTest {
     void testCrediterCompte() throws Exception {
         //Créer le compte
         mockMvc.perform(MockMvcRequestBuilders.post("/comptes/creer")
-        		.param("id", "1")
+        		.param("id", "2")
                 .param("solde", "10.0")
                 .param("nomClient", "Saad"))
                 .andExpect(status().isOk());
 
         //créditer le compte
         mockMvc.perform(MockMvcRequestBuilders.post("/comptes/crediter")
-                .param("id", "1")
+                .param("id", "2")
                 .param("montant", "30.0"))
                 .andExpect(status().isOk()); 
     }
@@ -48,13 +48,13 @@ public class CompteControllerTest {
     void testDebiterCompte() throws Exception {
         
         mockMvc.perform(MockMvcRequestBuilders.post("/comptes/creer")
-        		.param("id", "1")
+        		.param("id", "3")
                 .param("solde", "10.0")
                 .param("nomClient", "Saad"))
                 .andExpect(status().isOk());
         
         mockMvc.perform(MockMvcRequestBuilders.post("/comptes/debiter")
-        		.param("id", "1")
+        		.param("id", "3")
                 .param("montant", "3.0"))
                 .andExpect(status().isOk());
     }
@@ -62,15 +62,15 @@ public class CompteControllerTest {
     @Test
     void testDebiterSoldeInsuffisant() throws Exception {
        mockMvc.perform(MockMvcRequestBuilders.post("/comptes/creer")
-        		.param("id", "1")
+        		.param("id", "4")
                 .param("solde", "10.0")
                 .param("nomClient", "Saad"))
                 .andExpect(status().isOk());
         
         mockMvc.perform(MockMvcRequestBuilders.post("/comptes/debiter")
-        		.param("id", "1")
+        		.param("id", "4")
                 .param("montant", "30.0"))
-                .andExpect(status().isOk()); 
+                .andExpect(status().isInternalServerError()); 
     }
 	
 	
